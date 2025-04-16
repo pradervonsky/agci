@@ -16,6 +16,16 @@ body {
     z-index: 2;
   }
   
+  #subtitle {
+    position: absolute;
+    top: 90px;
+    width: 100%;
+    text-align: center;
+    color: white;
+    font-size: 1em;
+    z-index: 3;
+  }
+
   a-scene {
     position: absolute;
     top: 0;
