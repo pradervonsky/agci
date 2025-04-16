@@ -7,11 +7,12 @@ body {
   
   #title {
     position: absolute;
-    top: 20px;
+    top: 50px;
     width: 100%;
     text-align: center;
     color: white;
-    font-size: 2em;
+    font-size: 10em;
+    text-emphasis: bold;
     z-index: 2;
   }
   
