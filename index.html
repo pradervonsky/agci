@@ -25,10 +25,15 @@
       <a-entity light="type: ambient; color: #FFFFFF; intensity: 0.6"></a-entity>
       <a-entity light="type: directional; color: #FFFFFF; intensity: 0.8" position="1 1 0.5"></a-entity>
 
+      <a-entity 
+        id="cameraRig"
+        position="0 1.6 4"
+        movement-controls>
       <a-camera 
-        position="0 1.6 0"
+        wasd-controls-enabled="true"
         look-controls="magicWindowTrackingEnabled: true; touchEnabled: true">
       </a-camera>
+    </a-entity>
     </a-scene>
 
     <div id="caption">
