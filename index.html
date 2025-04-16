@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>AGCI</title>
     <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/aframe-orbit-controls@1.0.0/dist/aframe-orbit-controls.min.js"></script>
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
@@ -29,28 +30,25 @@
     
       <!-- Camera with movement -->
       <a-entity 
-        id="cameraRig"
+        id="orbitRig"
         position="0 1.6 4"
-        movement-controls>
-        <a-camera 
-          wasd-controls-enabled="true"
-          look-controls="magicWindowTrackingEnabled: true; touchEnabled: true">
-        </a-camera>
+        orbit-controls="
+          target: 0 0 -3;
+          enableDamping: true;
+          dampingFactor: 0.125;
+          rotateSpeed: 0.25;
+          minDistance: 1;
+          maxDistance: 10;
+          autoRotate: false;
+          enableZoom: true;
+        "
+      >
+        <a-camera></a-camera>
       </a-entity>
-    
-      <!-- Ground Plane -->
-      <a-plane 
-        rotation="-90 0 0" 
-        width="20" 
-        height="20" 
-        color="#111" 
-        shadow
-      ></a-plane>
     </a-scene>
 
     <div id="caption">
-      <p>This tree reflects Aarhus’ environmental health.</p>
-      <p>Its condition changes with real data.</p>
+      <p>This tree reflects Aarhus’ environmental health for today.</p>
       <p><a href="https://public.tableau.com/app/profile/pradana.aditya/viz/HowstheWeatherHowsMyMood/db" target="_blank">Explore the detailed dashboard here!</a></p>
     </div>
   </body>
