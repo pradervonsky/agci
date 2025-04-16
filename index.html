@@ -9,26 +9,30 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
+    <!-- Title -->
     <div id="title">AGCI</div>
 
+    <!-- 3D Scene -->
     <a-scene background="color: #000000" embedded>
       <a-assets>
         <a-asset-item id="flowerModel" src="lowpoly_tree.glb"></a-asset-item>
       </a-assets>
-    
-      <!-- Tree -->
+
+      <!-- Tree Model with idle rotation -->
       <a-entity 
+        id="treeModel"
         gltf-model="#flowerModel"
         position="0 0 -3"
         rotation="0 180 0"
         scale="1 1 1"
+        animation="property: rotation; to: 0 540 0; loop: true; dur: 20000; easing: linear"
       ></a-entity>
-    
+
       <!-- Lighting -->
       <a-entity light="type: ambient; color: #FFFFFF; intensity: 0.6"></a-entity>
       <a-entity light="type: directional; color: #FFFFFF; intensity: 0.8" position="1 1 0.5"></a-entity>
-    
-      <!-- Camera with movement -->
+
+      <!-- Orbiting Camera -->
       <a-entity 
         id="orbitRig"
         position="0 1.6 4"
@@ -47,9 +51,28 @@
       </a-entity>
     </a-scene>
 
+    <!-- Caption -->
     <div id="caption">
       <p>This tree reflects Aarhus’ environmental health for today.</p>
-      <p><a href="https://public.tableau.com/app/profile/pradana.aditya/viz/HowstheWeatherHowsMyMood/db" target="_blank">Explore the detailed dashboard here!</a></p>
+      <p><a href="https://public.tableau.com/app/profile/pradana.aditya/viz/HowstheWeatherHowsMyMood/db" target="_blank">🌿 Explore the dashboard here!</a></p>
     </div>
+
+    <!-- JS to stop rotation on user interaction -->
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const tree = document.getElementById('treeModel');
+
+        const stopRotation = () => {
+          if (tree.hasAttribute('animation')) {
+            tree.removeAttribute('animation');
+            window.removeEventListener('touchstart', stopRotation);
+            window.removeEventListener('mousedown', stopRotation);
+          }
+        };
+
+        window.addEventListener('touchstart', stopRotation);
+        window.addEventListener('mousedown', stopRotation);
+      });
+    </script>
   </body>
 </html>

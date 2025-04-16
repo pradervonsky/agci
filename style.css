@@ -37,10 +37,10 @@ body {
   }
   
   #caption a {
-    color: #90ee90; /* soft green to hint "green" metaphor */
+    color: #90ee90;
     text-decoration: none;
   }
   
   #caption a:hover {
-    text-decoration: underline;
-  }
+    text-decoration: bold;
+  }  
