@@ -24,3 +24,23 @@ body {
     width: 100vw;
     z-index: 1;
   }
+
+  #caption {
+    position: absolute;
+    bottom: 30px;
+    width: 100%;
+    text-align: center;
+    color: white;
+    font-size: 1em;
+    z-index: 2;
+    padding: 0 10px;
+  }
+  
+  #caption a {
+    color: #90ee90; /* soft green to hint "green" metaphor */
+    text-decoration: none;
+  }
+  
+  #caption a:hover {
+    text-decoration: underline;
+  }
