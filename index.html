@@ -14,26 +14,38 @@
       <a-assets>
         <a-asset-item id="flowerModel" src="lowpoly_tree.glb"></a-asset-item>
       </a-assets>
-
+    
+      <!-- Tree -->
       <a-entity 
         gltf-model="#flowerModel"
         position="0 0 -3"
         rotation="0 180 0"
         scale="1 1 1"
       ></a-entity>
-
+    
+      <!-- Lighting -->
       <a-entity light="type: ambient; color: #FFFFFF; intensity: 0.6"></a-entity>
       <a-entity light="type: directional; color: #FFFFFF; intensity: 0.8" position="1 1 0.5"></a-entity>
-
+    
+      <!-- Camera with movement -->
       <a-entity 
         id="cameraRig"
         position="0 1.6 4"
         movement-controls>
-      <a-camera 
-        wasd-controls-enabled="true"
-        look-controls="magicWindowTrackingEnabled: true; touchEnabled: true">
-      </a-camera>
-    </a-entity>
+        <a-camera 
+          wasd-controls-enabled="true"
+          look-controls="magicWindowTrackingEnabled: true; touchEnabled: true">
+        </a-camera>
+      </a-entity>
+    
+      <!-- Ground Plane -->
+      <a-plane 
+        rotation="-90 0 0" 
+        width="20" 
+        height="20" 
+        color="#111" 
+        shadow
+      ></a-plane>
     </a-scene>
 
     <div id="caption">
