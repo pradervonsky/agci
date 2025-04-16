@@ -7,7 +7,7 @@ body {
   
   #title {
     position: absolute;
-    top: 30px;
+    top: 20px;
     width: 100%;
     text-align: center;
     color: white;
@@ -18,7 +18,7 @@ body {
   
   #subtitle {
     position: absolute;
-    top: 90px;
+    top: 80px;
     width: 100%;
     text-align: center;
     color: white;
@@ -37,11 +37,11 @@ body {
 
   #caption {
     position: absolute;
-    bottom: 30px;
+    bottom: 20px;
     width: 100%;
     text-align: center;
     color: white;
-    font-size: 0.9em;
+    font-size: 0.8em;
     z-index: 2;
   }
   
