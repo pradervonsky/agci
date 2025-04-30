@@ -92,6 +92,7 @@ body {
   object-fit: cover;
   display: block;
   filter: grayscale(0.5) brightness(0.25) contrast(1) drop-shadow(0 0 0 white);
+  pointer-events: none;
 }
 
 .sky-fallback {
