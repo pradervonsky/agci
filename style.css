@@ -1,55 +1,146 @@
 body {
-    margin: 0;
-    overflow: hidden;
-    background-color: black;
-    font-family: sans-serif;
-  }
-  
-  #title {
-    position: absolute;
-    top: 20px;
-    width: 100%;
-    text-align: center;
-    color: white;
-    font-size: 5em;
-    text-emphasis: bold;
-    z-index: 2;
-  }
-  
-  #subtitle {
-    position: absolute;
-    top: 80px;
-    width: 100%;
-    text-align: center;
-    color: white;
-    font-size: 1em;
-    z-index: 3;
-  }
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  color: white;
+  overflow: hidden;
+}
 
-  a-scene {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100vh;
-    width: 100vw;
-    z-index: 1;
-  }
+.bg-container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
 
-  #caption {
-    position: absolute;
-    bottom: 20px;
-    width: 100%;
-    text-align: center;
-    color: white;
-    font-size: 0.8em;
-    z-index: 2;
+.bg-container::after {
+  content: "";
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -30%);
+  width: 50vw;
+  height: 50vh;
+  background: radial-gradient(circle, var(--after-glow-color, rgba(255,255,255,0.2)) 0%, transparent 80%);
+  filter: blur(30px);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.background-img {
+  width: 100.7%;
+  height: 100.7%;
+  object-fit: cover;
+  display: block;
+  pointer-events: none; /* Let clicks pass through */
+}
+
+.projection {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  mix-blend-mode: difference;
+  z-index: 2;
+  opacity: 0.1;
+  animation: projectorFlicker 1.5s infinite ease-in-out;
+  filter: grayscale(1) brightness(1.3) contrast(1.2) drop-shadow(0px 0 20px white);
+}
+
+.projection-container {
+  position: absolute;
+  top: 20%;
+  left: 30%;
+  width: 40vw;
+  height: 40vh;
+  z-index: 2;
+  pointer-events: none; /* Let clicks pass through */
+  overflow: hidden;
+}
+
+.color-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  mix-blend-mode: color;
+  opacity: 0.3;
+  transition: background-color 0.5s ease;
+  overflow: hidden;
+  pointer-events: none;
+  mask-image: url('assets/animals/orangutan.png');
+  mask-repeat: no-repeat;
+  mask-position: center;
+  mask-size: contain;
+}
+
+.text-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  z-index: 3;
+}
+
+a {
+  color: white;
+  text-decoration: none;
+}
+
+@keyframes projectorFlicker {
+  0%, 100% {
+    opacity: 0.3;
   }
-  
-  #caption a {
-    color: #90ee90;
-    text-decoration: none;
+  25% {
+    opacity: 0.25;
   }
-  
-  #caption a:hover {
-    text-decoration: bold;
-  }  
+  50% {
+    opacity: 0.32;
+  }
+  75% {
+    opacity: 0.28;
+  }
+}
+
+.indicator-buttons {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 15px;
+  z-index: 4;
+}
+
+.indicator {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: transform 0.2s, opacity 0.3s;
+}
+
+.indicator:hover {
+  transform: scale(1.1);
+  opacity: 1;
+}
+
+.indicator.red {
+  background-color: red;
+}
+
+.indicator.orange {
+  background-color: orange;
+}
+
+.indicator.green {
+  background-color: limegreen;
+}
