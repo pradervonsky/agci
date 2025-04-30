@@ -7,10 +7,15 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
+    <div id="loading-screen">
+      <div class="spinner"></div>
+      <p class="loading-caption">AGCI_data-science-project_2025/Group 8/</p>
+    </div>
     <div class="bg-container">
-      <img src="assets/molle_aros_sky.png" alt="Background" class="background-img" />
+      <video src="assets/night_sky.webm" autoplay loop muted playsinline class="background-video"></video>
+      <img src="assets/molle_aros_sky.png" alt="Overlay Image" class="background-img" />
       <div class="projection-container">
-        <video src="assets/animals/orangutan_alpha.webm" autoplay loop muted playsinline class="projection"></video>
+        <video src="assets/animals/orangutan.webm" autoplay loop muted playsinline class="projection"></video>
         <div class="color-overlay" id="colorOverlay"></div>
       </div>
       <div class="text-overlay">
@@ -25,6 +30,15 @@
       <button class="indicator orange" onclick="setProjectionColor('orange')"></button>
       <button class="indicator green" onclick="setProjectionColor('green')"></button>
     </div>
+    <script>
+      window.addEventListener("load", function () {
+        const loadingScreen = document.getElementById("loading-screen");
+        loadingScreen.style.opacity = "0";
+        setTimeout(() => {
+          loadingScreen.style.display = "none";
+        }, 500);
+      });
+    </script>
     <script>
       function setProjectionColor(color) {
         const colorOverlay = document.getElementById('colorOverlay');
@@ -54,7 +68,7 @@
         }
 
         colorOverlay.style.backgroundColor = selectedColor;
-        projection.style.filter = `grayscale(1) brightness(1.3) contrast(1.2) drop-shadow(0 0 20px ${shadowColor})`;
+        projection.style.filter = `grayscale(1) brightness(1.9) contrast(1.2) drop-shadow(0 0 0px ${shadowColor})`;
         bgContainer.style.setProperty('--after-glow-color', afterGlowColor);
       }
     </script>
