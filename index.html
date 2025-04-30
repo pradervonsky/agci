@@ -12,7 +12,12 @@
       <p class="loading-caption">AGCI_data-science-project_2025/Group 8/</p>
     </div>
     <div class="bg-container">
-      <video src="assets/night_sky.webm" autoplay loop muted playsinline class="background-video"></video>
+      <div class="sky-wrapper">
+        <video id="skyVideo" autoplay loop muted playsinline class="sky-bg">
+          <source src="assets/night_sky.webm" type="video/webm" />
+        </video>
+        <img src="assets/molle_aros.png" alt="Fallback Sky" class="sky-fallback" />
+      </div>
       <img src="assets/molle_aros_sky.png" alt="Overlay Image" class="background-img" />
       <div class="projection-container">
         <video src="assets/animals/orangutan.webm" autoplay loop muted playsinline class="projection"></video>
@@ -38,6 +43,19 @@
           loadingScreen.style.display = "none";
         }, 500);
       });
+    </script>
+    <script>
+      const skyVideo = document.getElementById('skyVideo');
+      const skyFallback = document.querySelector('.sky-fallback');
+    
+      // Try to detect if the video plays
+      let fallbackTimer = setTimeout(() => {
+        // If readyState isn't enough to start playing, fallback
+        if (skyVideo.readyState < 2) {
+          skyVideo.style.display = 'none';
+          skyFallback.style.display = 'block';
+        }
+      }, 1000); // wait 1s, adjust if needed
     </script>
     <script>
       function setProjectionColor(color) {
