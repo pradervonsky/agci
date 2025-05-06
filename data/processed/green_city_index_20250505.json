@@ -1,0 +1,75 @@
+{
+  "overall_score": 73.6,
+  "dimension_scores": {
+    "air": 100.0,
+    "water": 86.1,
+    "nature": 65.6,
+    "waste": 62.7,
+    "noise": 53.7
+  },
+  "normalized_metrics": {
+    "air": {
+      "pm2_5": 100,
+      "pm10": 100,
+      "no2": 100,
+      "overall": 100.0
+    },
+    "water": {
+      "consumption": 91.6,
+      "ili": 69.80000000000001,
+      "treatment_compliance": 97.0,
+      "overall": 86.13333333333333
+    },
+    "nature": {
+      "protected_area_pct": 85.0,
+      "tree_canopy_pct": 57.2,
+      "bird_species_change_pct": 54.5,
+      "overall": 65.56666666666666
+    },
+    "waste": {
+      "waste_per_capita": 49.4,
+      "recycling_rate": 47.2,
+      "landfill_rate": 91.5,
+      "overall": 62.699999999999996
+    },
+    "noise": {
+      "lden_exposed_pct": 34.5,
+      "lnight_exposed_pct": 57.5,
+      "sleep_disturbed_pct": 69.2,
+      "overall": 53.73333333333333
+    },
+    "timestamp": "2025-05-05T20:42:19.631542"
+  },
+  "raw_data": {
+    "air": {
+      "pm10": 4.995833333333333,
+      "pm2_5": 2.975,
+      "no2": 3.983333333333333,
+      "european_aqi": 38
+    },
+    "water": {
+      "consumption": 108.4,
+      "ili": 2.51,
+      "treatment_compliance": 98.5
+    },
+    "nature": {
+      "protected_area_pct": 8.5,
+      "tree_canopy_pct": 19.3,
+      "bird_species_count": 114,
+      "bird_species_change_pct": 1.8
+    },
+    "waste": {
+      "waste_per_capita": 0.453,
+      "recycling_rate": 47.2,
+      "landfill_rate": 5.1
+    },
+    "noise": {
+      "lden_exposed_pct": 26.2,
+      "lnight_exposed_pct": 17.0,
+      "sleep_disturbed_pct": 7.7
+    },
+    "timestamp": "2025-05-05T12:00:00"
+  },
+  "timestamp": "2025-05-05T20:42:19.631554",
+  "date": "2025-05-05"
+}
