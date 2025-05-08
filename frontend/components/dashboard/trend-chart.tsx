@@ -15,6 +15,7 @@ interface TrendChartProps {
   color?: string;
   targetLine?: number;
   unit?: string;
+  minY?: number; // Added to support dynamic Y-axis minimum
 }
 
 export function TrendChart({ 
@@ -23,7 +24,8 @@ export function TrendChart({
   data, 
   color = "#3B82F6", 
   targetLine, 
-  unit = '' 
+  unit = '',
+  minY
 }: TrendChartProps) {
   
   // Format date for tooltip
@@ -35,6 +37,18 @@ export function TrendChart({
       return dateString;
     }
   };
+
+  // Calculate the minimum Y value dynamically if not provided
+  const dynamicMinY = minY !== undefined 
+    ? minY 
+    : (data.length > 0 
+      ? Math.max(0, Math.min(...data.map(d => d.value)) - 5) 
+      : 0);
+  
+  // Calculate maximum Y value (with some padding)
+  const maxY = data.length > 0 
+    ? Math.max(...data.map(d => d.value), targetLine || 0) + 5 
+    : 100;
 
   return (
     <Card className="w-full">
@@ -64,7 +78,7 @@ export function TrendChart({
                 textAnchor="end"
               />
               <YAxis 
-                domain={[0, 100]} 
+                domain={[dynamicMinY, maxY]} 
                 tick={{ fontSize: 12 }}
                 tickFormatter={(value) => `${value}${unit}`}
               />
