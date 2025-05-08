@@ -1,8 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Download, Leaf } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Leaf } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 
 export function Header() {
@@ -30,10 +29,6 @@ export function Header() {
           
           <Separator orientation="vertical" className="h-6" />
           
-          <Button variant="outline" size="sm" className="hidden md:flex">
-            <Download className="mr-2 h-4 w-4" />
-            Export
-          </Button>
         </div>
       </div>
     </header>

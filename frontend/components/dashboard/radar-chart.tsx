@@ -178,7 +178,7 @@ const DimensionRadarChart = () => {
               <PolarGrid strokeDasharray="3 3" stroke="#e5e7eb" />
               <PolarAngleAxis 
                 dataKey="dimension" 
-                tick={{ fill: '#6b7280', fontSize: 12 }} 
+                tick={{ fill: '#6b7280', fontSize: 10 }} 
                 tickFormatter={(value) => dimensionLabels[value]}
               />
               <PolarRadiusAxis 
@@ -196,24 +196,6 @@ const DimensionRadarChart = () => {
               <Tooltip content={<CustomTooltip />} />
             </RadarChart>
           </ResponsiveContainer>
-        </div>
-        <div className="flex justify-center mt-4 gap-4 flex-wrap">
-          {Object.keys(dimensionLabels).map(dim => (
-            <div key={dim} className="flex items-center gap-2">
-              <div 
-                className="w-3 h-3 rounded-full" 
-                style={{ 
-                  backgroundColor: 
-                    dim === 'air' ? '#3B82F6' : 
-                    dim === 'water' ? '#06B6D4' : 
-                    dim === 'nature' ? '#10B981' : 
-                    dim === 'waste' ? '#F59E0B' : 
-                    '#8B5CF6'
-                }}
-              ></div>
-              <span className="text-xs text-gray-600">{dimensionLabels[dim]}</span>
-            </div>
-          ))}
         </div>
       </CardContent>
     </Card>

@@ -1,8 +1,7 @@
-// components/dashboard/score-card.tsx
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { ArrowUp, ArrowDown } from "lucide-react";
+
 
 interface ScoreCardProps {
   title: string;
@@ -10,6 +9,7 @@ interface ScoreCardProps {
   score: number;
   target?: number;
   trend?: number; // Positive means improving, negative means worsening
+  trendPeriod?: 'week' | 'month' | 'year'; // Added period indication
   icon?: React.ReactNode;
   color?: string;
 }
@@ -20,38 +20,43 @@ export function ScoreCard({
   score, 
   target = 70, 
   trend, 
-  icon,
-  color 
+  trendPeriod = 'month', // Default to month
+  icon
 }: ScoreCardProps) {
-  // Calculate progress percentage
+  // Calculate progress percentage relative to target
   const progress = Math.min(100, Math.round((score / target) * 100));
   
-  // Determine score category
+  // Determine score category and colors
   let scoreColor = "text-gray-500";
-  let progressColor = "bg-gray-500";
+  let progressFillColor = "bg-green-500";
   
   if (score >= 70) {
     scoreColor = "text-green-600";
-    progressColor = "bg-green-500";
+    progressFillColor = "bg-green-500";
   } else if (score >= 40) {
     scoreColor = "text-amber-600";
-    progressColor = "bg-amber-500";
+    progressFillColor = "bg-amber-500";
   } else {
     scoreColor = "text-red-600";
-    progressColor = "bg-red-500";
+    progressFillColor = "bg-red-500";
   }
   
-  // Use custom color if provided
-  if (color) {
-    scoreColor = `text-${color}-600`;
-    progressColor = `bg-${color}-500`;
-  }
+
+  // Get trend period display text
+  const trendPeriodDisplay = {
+    'week': 'WoW',
+    'month': 'MoM',
+    'year': 'YoY'
+  }[trendPeriod];
+
+  // Always show progress bar in color, even if progress is 100%
+  const displayWidth = Math.max(5, progress); // Ensure at least 5% width for visibility
 
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between pb-2">
         <div className="flex flex-col space-y-1.5">
-          <CardTitle className="text-sm font-medium flex items-center gap-2">
+          <CardTitle className="text-sm font-medium flex items-center gap-2 h-6">
             {icon && <span>{icon}</span>}
             {title}
           </CardTitle>
@@ -67,6 +72,7 @@ export function ScoreCard({
               <ArrowDown className="h-3 w-3" />
             )}
             {Math.abs(trend).toFixed(1)}%
+            <span className="ml-0.5 text-[10px] opacity-75">{trendPeriodDisplay}</span>
           </Badge>
         )}
       </CardHeader>
@@ -75,7 +81,15 @@ export function ScoreCard({
           <span className={scoreColor}>{Math.round(score)}</span>
           <span className="text-gray-400 text-xs font-normal ml-1">/ 100</span>
         </div>
-        <Progress value={progress} className={progressColor} />
+        
+        {/* Fixed Progress Bar Implementation */}
+        <div className="h-2 w-full bg-gray-200 rounded-full overflow-hidden">
+          <div 
+            className={progressFillColor + " h-full rounded-full"} 
+            style={{ width: `${displayWidth}%` }}
+          ></div>
+        </div>
+        
         <p className="text-xs text-gray-500 mt-2">
           {progress}% to target ({target})
         </p>

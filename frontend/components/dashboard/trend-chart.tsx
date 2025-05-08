@@ -57,7 +57,7 @@ export function TrendChart({
         {description && <CardDescription>{description}</CardDescription>}
       </CardHeader>
       <CardContent>
-        <div className="h-[300px]">
+        <div className="h-[370px]">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart
               data={data}

@@ -151,7 +151,7 @@ export default function DashboardPage() {
     <div className="space-y-6">
       <h1 className="text-2xl font-bold">Dashboard Overview</h1>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
         <ScoreCard
           title="Overall Score"
           score={indexData.overall_score}
@@ -194,6 +194,15 @@ export default function DashboardPage() {
           trend={0.6}
           icon={<Recycle className="h-4 w-4" />}
           color="amber"
+        />
+
+        <ScoreCard
+          title="Noise"
+          score={indexData.noise_score}
+          target={indexData.target_score}
+          trend={-0.5}
+          icon={<Volume2 className="h-4 w-4" />}
+          color="purple"
         />
       </div>
       
