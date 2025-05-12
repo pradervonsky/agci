@@ -22,8 +22,11 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r backend/requirements.txt
           
-      - name: Run daily update
-        run: python -m backend.pipeline.run_daily_update
+      - name: Run daily update with logging
+        run: |
+          echo "Running GCI pipeline..."
+          python -m backend.pipeline.run_daily_update
+          echo "Exit code: $?"
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
