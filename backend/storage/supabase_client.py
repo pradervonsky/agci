@@ -30,7 +30,7 @@ class SupabaseManager:
 
         # Get Supabase credentials
         self.supabase_url = os.getenv("SUPABASE_URL")
-        self.supabase_key = os.getenv("SUPABASE_API_KEY")
+        self.supabase_key = os.getenv("SUPABASE_API_KEY") or os.getenv("SUPABASE_KEY")
 
         # Initialize client
         self.client = None
