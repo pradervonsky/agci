@@ -14,8 +14,8 @@ class WaterManagementSimulator:
 
         # Baseline values for Aarhus/Denmark
         self.baseline_consumption = 105  # L/capita/day (Danish average)
-        self.baseline_ili = 2.5  # Infrastructure Leakage Index
-        self.baseline_treatment = 98.5  # % compliance with UWWTD
+        self.baseline_ili = 0.83  # Infrastructure Leakage Index - exceptionally low
+        self.baseline_treatment = 100.0  # % compliance with UWWTD - full compliance
 
         # Seasonal variation factors
         self.months = range(1, 13)
