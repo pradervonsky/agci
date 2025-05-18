@@ -6,9 +6,9 @@ from datetime import datetime, timedelta
 class WasteSimulator:
     def __init__(self):
         # Baseline values for Aarhus/Denmark
-        self.baseline_waste_per_capita = 0.45  # tonnes/year
-        self.baseline_recycling_rate = 48.0  # percentage
-        self.baseline_landfill_rate = 5.0  # percentage (low in Denmark)
+        self.baseline_waste_per_capita = 0.67  # tonnes/year
+        self.baseline_recycling_rate = 62.0  # percentage
+        self.baseline_landfill_rate = 1.0  # percentage (very low in Aarhus)
 
         # Danish holidays with increased waste
         self.holidays = [

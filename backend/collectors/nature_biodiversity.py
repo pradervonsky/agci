@@ -10,7 +10,9 @@ class NatureBiodiversitySimulator:
         self.city_area = city_area_km2
 
         # Baseline values
-        self.protected_area_pct = 8.5  # % of city that's protected/natural areas
+        self.protected_area_pct = (
+            18.0  # % of city that's protected/natural areas (8,500 ha out of 47,000 ha)
+        )
         self.tree_canopy_pct = 19.3  # % tree coverage
         self.baseline_bird_species = 112  # Estimated species in urban Aarhus
 

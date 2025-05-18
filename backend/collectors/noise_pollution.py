@@ -7,9 +7,15 @@ import requests
 class NoiseSimulator:
     def __init__(self):
         # Baseline values for urban areas
-        self.baseline_lden_exposed = 25.0  # % population exposed to Lden ≥ 55 dB
-        self.baseline_lnight_exposed = 18.0  # % population exposed to Lnight ≥ 50 dB
-        self.baseline_sleep_disturbed = 8.5  # % population with high sleep disturbance
+        self.baseline_lden_exposed = (
+            29.0  # % population exposed to Lden ≥ 55 dB (100,000+ out of ~350,000)
+        )
+        self.baseline_lnight_exposed = (
+            14.0  # % population exposed to Lnight ≥ 50 dB (tens of thousands)
+        )
+        self.baseline_sleep_disturbed = (
+            7.0  # % population with high sleep disturbance (estimate based on Lnight)
+        )
 
         # Traffic factors by day type (index values)
         self.traffic_factors = {
