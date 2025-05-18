@@ -2,7 +2,9 @@
 .DS_Store
 .env
 
-# Byte-compiled / optimized / DLL files
+# Create or edit .gitignore file
+cat >> .gitignore << 'EOF'
+# Python cache files
 __pycache__/
 *.py[cod]
 *$py.class
@@ -10,7 +12,8 @@ __pycache__/
 # C extensions
 *.so
 
-# Distribution / packaging
+# Other common Python ignores
+*.so
 .Python
 build/
 develop-eggs/
@@ -18,16 +21,16 @@ dist/
 downloads/
 eggs/
 .eggs/
-/backend/lib/
+lib/
 lib64/
 parts/
 sdist/
 var/
 wheels/
-share/python-wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+EOF
 MANIFEST
 
 # PyInstaller
