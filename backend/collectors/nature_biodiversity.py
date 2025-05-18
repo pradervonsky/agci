@@ -33,18 +33,6 @@ class NatureBiodiversitySimulator:
         self.cumulative_tree_change = 0
         self.cumulative_area_change = 0
 
-    def _check_special_events(self):
-        """Check if any special events occur today"""
-        today = datetime.now().strftime("%Y-%m-%d")
-
-        impact = {"tree_canopy_pct": 0, "protected_area_pct": 0}
-        if today in self.special_events:
-            event, event_impact = self.special_events[today]
-            impact = event_impact
-            print(f"Special event today: {event}")
-
-        return impact
-
     def _simulate_bird_species(self):
         """Simulate bird species count based on season"""
         today = datetime.now()
@@ -68,12 +56,6 @@ class NatureBiodiversitySimulator:
 
     def get_current_data(self):
         """Generate nature & biodiversity metrics for the current day"""
-        # Check for special events
-        event_impact = self._check_special_events()
-
-        # Update cumulative changes
-        self.cumulative_tree_change += event_impact["tree_canopy_pct"]
-        self.cumulative_area_change += event_impact["protected_area_pct"]
 
         # Slow natural growth (tiny daily increases)
         self.cumulative_tree_change += 0.0003  # ~0.1% per year natural growth
