@@ -1,6 +1,9 @@
 // components/dashboard/dimension-card.tsx
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { InfoIcon } from "lucide-react";
+import { dimensionsConfig } from "@/lib/utils";
 
 type DimensionType = 'air' | 'water' | 'nature' | 'waste' | 'noise';
 
@@ -14,65 +17,23 @@ interface Metric {
 interface DimensionCardProps {
   dimension: DimensionType;
   name: string;
+  description?: string;
   score: number;
   metrics: Metric[];
   icon: React.ReactNode;
   color?: string;
 }
 
-// Expanded mapping for all metric names shown in the UI
-const metricLabels: Record<string, string> = {
-  // Air metrics
-  'pm25_concentration': 'PM2.5 Level',
-  'pm2_5': 'PM2.5 Level',
-  'pm10_concentration': 'PM10 Level',
-  'pm10': 'PM10 Level',
-  'no2_concentration': 'NO₂ Level',
-  'no2': 'NO₂ Level',
-  'o3_concentration': 'Ozone Level',
-  'aqi_value': 'Air Quality Index',
-  
-  // Water metrics
-  'water_consumption': 'Water Usage',
-  'consumption': 'Water Usage',
-  'water_quality_index': 'Quality Index',
-  'iii': 'Quality Index',
-  'water_treatment_rate': 'Treatment Rate',
-  'treatment_compliance': 'Treatment Compliance',
-  'drinking_water_compliance': 'Safe Drinking',
-  
-  // Nature metrics
-  'green_area_percentage': 'Green Space',
-  'biodiversity_index': 'Biodiversity',
-  'tree_canopy_cover': 'Tree Coverage',
-  'tree_canopy_pct': 'Tree Cover %',
-  'protected_areas': 'Protected Areas',
-  'protected_area_pct': 'Protected Area %',
-  'bird_species_change_pct': 'Bird Species Change',
-  
-  // Waste metrics
-  'waste_per_capita': 'Waste per Person',
-  'recycling_rate': 'Recycling Rate',
-  'landfill_diversion': 'Landfill Diversion',
-  'landfill_rate': 'Landfill Rate',
-  'organic_waste_recovery': 'Organic Recovery',
-  
-  // Noise metrics
-  'noise_level_day': 'Daytime Noise',
-  'lden_exposed_pct': 'Day Noise Exposure',
-  'noise_level_night': 'Nighttime Noise',
-  'lnight_exposed_pct': 'Night Noise Exposure',
-  'noise_complaints': 'Complaints',
-  'sleep_disturbed_pct': 'Sleep Disturbance'
-};
-
 export function DimensionCard({ 
+  dimension, 
   name, 
+  description, 
   score, 
   metrics, 
   icon,
   color = "#3B82F6"
 }: DimensionCardProps) {
+  console.log("Metrics:", metrics);
   // Determine score category
   let scoreColor = "text-gray-500";
   let badgeColor = "bg-gray-100 text-gray-800";
@@ -91,52 +52,96 @@ export function DimensionCard({
     badgeColor = "bg-red-100 text-red-800";
     category = "Poor";
   }
+
+  // Get dimension config for descriptions
+  const dimensionConfig = dimensionsConfig[dimension];
   
-  // Helper function to format metric values
+  // Helper function to get metric details
+  const getMetricDetails = (metricName: string) => {
+    const foundMetric = dimensionConfig?.metrics.find(
+      m => m.name === metricName || m.id === metricName
+    );
+    return {
+      name: foundMetric?.name || metricName,
+      description: foundMetric?.description || "No description available",
+      unit: foundMetric?.unit || "",
+    };
+  };
+  
+  
+  // Helper function to format value
   const formatValue = (value: number): string => {
-    // If value is already an integer or has at most 1 decimal place
     if (Number.isInteger(value) || (value.toString().split('.')[1]?.length || 0) <= 1) {
       return value.toString();
     }
-    // Otherwise round to 1 decimal place
     return value.toFixed(1);
   };
   
   return (
-    <Card className="overflow-hidden">
+    <Card className="h-full overflow-hidden">
       <div
         className="h-2"
         style={{ backgroundColor: color }}
       />
-      <CardHeader className="flex flex-row items-center justify-between pb-2">
-        <CardTitle className="text-sm font-medium flex items-center gap-2">
-          {icon}
-          {name}
-        </CardTitle>
-        <div className="flex items-center gap-2">
-          <Badge className={badgeColor}>{category}</Badge>
-          <div className={`text-2xl font-bold ${scoreColor}`}>
-            {Math.round(score)}
+      <CardHeader className="pb-2">
+        <div className="flex justify-between items-center mb-1">
+          <CardTitle className="text-lg flex items-center gap-2">
+            {icon}
+            {name}
+          </CardTitle>
+          <div className="flex items-center gap-2">
+            <Badge className={badgeColor}>{category}</Badge>
+            <div className={`text-2xl font-bold ${scoreColor}`}>
+              {Math.round(score)}
+            </div>
           </div>
         </div>
+        {description && (
+          <CardDescription>{description}</CardDescription>
+        )}
       </CardHeader>
-      <CardContent className="pb-5">
-        <div className="space-y-2">
-          {metrics.map((metric) => (
-            <div key={metric.name} className="flex justify-between items-center">
-              <span className="text-sm text-gray-500">
-                {metricLabels[metric.name] || metric.name.replace(/_/g, ' ')}
-              </span>
-              <div className="flex items-center gap-1">
-                <span className="text-sm font-medium">
-                  {formatValue(metric.value)} {metric.unit}
-                </span>
-                <Badge variant="outline" className="text-xs">
-                  {Math.round(metric.score)}
-                </Badge>
+      <CardContent>
+        <div className="space-y-3">
+          <div className="grid grid-cols-3 text-xs font-medium text-gray-500 mb-1">
+            <div>Metric</div>
+            <div className="text-right">Value</div>
+            <div className="text-right">Score</div>
+          </div>
+          
+          {metrics.map((metric) => {
+            const { name: displayName, description } = getMetricDetails(metric.name);
+            return (
+              <div key={metric.name} className="grid grid-cols-3 items-center py-2 border-b border-gray-100 last:border-0">
+                <div className="flex items-center">
+                  <span className="text-sm text-gray-700 truncate mr-1">{displayName}</span>
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <InfoIcon className="h-3.5 w-3.5 text-gray-400 cursor-help" />
+                      </TooltipTrigger>
+                      <TooltipContent className="max-w-xs">
+                        <p>{description}</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                </div>
+                
+                <div className="text-right text-sm font-medium">
+                  {formatValue(metric.value)} <span className="text-xs text-gray-500">{metric.unit}</span>
+                </div>
+                
+                <div className="flex justify-end">
+                  <Badge variant="outline" className={
+                    metric.score >= 70 ? "bg-green-50 text-green-700 border-green-200" :
+                    metric.score >= 40 ? "bg-amber-50 text-amber-700 border-amber-200" :
+                    "bg-red-50 text-red-700 border-red-200"
+                  }>
+                    {Math.round(metric.score)}
+                  </Badge>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </CardContent>
     </Card>

@@ -61,14 +61,15 @@ export function TrendChart({
           <ResponsiveContainer width="100%" height="100%">
             <LineChart
               data={data}
-              margin={{ top: 5, right: 20, left: 10, bottom: 20 }}
+              margin={{ top: 5, right: 20, left: 10, bottom: 30 }}
             >
               <CartesianGrid strokeDasharray="3 3" stroke="#f3f4f6" />
               <XAxis 
                 dataKey="date" 
                 tickFormatter={(value) => {
                   try {
-                    return format(parseISO(value), 'MMM d');
+                    // Change date format to be more compact
+                    return format(parseISO(value), 'dd MMM');
                   } catch {
                     return value;
                   }
@@ -76,6 +77,8 @@ export function TrendChart({
                 tick={{ fontSize: 12 }}
                 angle={-45}
                 textAnchor="end"
+                height={50}
+                tickMargin={10}
               />
               <YAxis 
                 domain={[dynamicMinY, maxY]} 

@@ -122,7 +122,7 @@ export const dimensionsConfig = {
       },
       {
         id: 'ili',
-        name: 'Infrastructure Leakage Index',
+        name: 'Infrastructure Leakage Index (ILI)',
         description: 'Measure of water lost through leaks',
         unit: 'ratio',
         goodRange: [0, 1.5],
