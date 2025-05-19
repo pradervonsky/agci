@@ -8,8 +8,8 @@ import { ScoreCard } from '@/components/dashboard/score-card';
 import { DimensionCard } from '@/components/dashboard/dimension-card';
 import { TrendChart } from '@/components/dashboard/trend-chart';
 import { supabase } from '@/lib/supabase';
-// Fix the import by using a relative path if needed
 import DimensionRadarChart from '@/components/dashboard/radar-chart';
+import { dimensionsConfig } from '@/lib/utils';
 
 interface DimensionData {
   score: number;
@@ -67,18 +67,32 @@ export default function DashboardPage() {
         if (indexError) throw indexError;
         setIndexData(latestIndex);
         
+        // Calculate date range for last 30 days
+        const today = new Date();
+        const thirtyDaysAgo = new Date();
+        thirtyDaysAgo.setDate(today.getDate() - 30);
+        
+        // Format dates for Supabase query
+        const todayStr = today.toISOString().split('T')[0];
+        const thirtyDaysAgoStr = thirtyDaysAgo.toISOString().split('T')[0];
+        
         // Fetch historical index data (last 30 days)
         const { data: historicalIndex, error: historyError } = await supabase
           .from('green_city_index')
           .select('date, overall_score')
-          .order('date', { ascending: true })
-          .limit(30);
+          .gte('date', thirtyDaysAgoStr)
+          .lte('date', todayStr)
+          .order('date', { ascending: true });
           
         if (historyError) throw historyError;
-        setHistoricalData(historicalIndex.map(item => ({
+        
+        // Map to the expected format and ensure dates are ordered correctly
+        const historicalPoints = historicalIndex.map(item => ({
           date: item.date,
           value: item.overall_score
-        })));
+        }));
+        
+        setHistoricalData(historicalPoints);
         
         // Fetch normalized metrics for each dimension
         const dimensions = ['air', 'water', 'nature', 'waste', 'noise'];
@@ -98,14 +112,28 @@ export default function DashboardPage() {
             
           if (metricsError) throw metricsError;
           
+
+          // Inside the fetchData function
           tempDimensionData[dimension] = {
             score: dimensionScore,
-            metrics: metrics.map(metric => ({
-              name: metric.metric_name,
-              value: metric.raw_value,
-              unit: '', // This would normally be determined by metric type
-              score: metric.normalized_score
-            }))
+            metrics: metrics.map(metric => {
+              // Check if dimension is a valid key in dimensionsConfig
+              const isDimensionValid = (dim: string): dim is keyof typeof dimensionsConfig => 
+                Object.keys(dimensionsConfig).includes(dim);
+              
+              // Find the metric in dimensionsConfig to get the unit
+              const dimensionMetrics = isDimensionValid(dimension) 
+                ? dimensionsConfig[dimension].metrics 
+                : [];
+              const foundMetric = dimensionMetrics.find(m => m.id === metric.metric_name);
+          
+              return {
+                name: metric.metric_name,
+                value: metric.raw_value,
+                unit: foundMetric?.unit || '', // Use the unit from dimensionsConfig
+                score: metric.normalized_score,
+              };
+            }),
           };
         }
         
@@ -210,7 +238,7 @@ export default function DashboardPage() {
         <div className="lg:col-span-2">
           <TrendChart 
             title="Green City Index Trend"
-            description={`Overall sustainability score (last updated: ${indexData.date})`}
+            description={`Overall sustainability score (last 30 days, updated: ${indexData.date})`}
             data={historicalData}
             targetLine={indexData.target_score}
           />
@@ -221,7 +249,7 @@ export default function DashboardPage() {
         </div>
       </div>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
         <DimensionCard 
           dimension="air"
           name="Air Quality"
@@ -266,8 +294,7 @@ export default function DashboardPage() {
           icon={<Volume2 className="h-4 w-4" />}
           color="#8B5CF6"
         />
-        </div>
       </div>
-    );
-  }
-   
+    </div>
+  );
+}
