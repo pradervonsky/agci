@@ -1,4 +1,6 @@
 // app/api/index/route.tsx
+export const dynamic = 'force-dynamic';
+
 import { NextResponse } from 'next/server';
 import { getLatestIndex } from '@/lib/supabase';
 
