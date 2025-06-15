@@ -236,39 +236,7 @@ a {
   }
 }
 
-.indicator-buttons {
-  position: absolute;
-  bottom: 30px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 15px;
-  z-index: 4;
-}
-
+.indicator-buttons,
 .indicator {
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  border: none;
-  cursor: pointer;
-  opacity: 0.7;
-  transition: transform 0.2s, opacity 0.3s;
-}
-
-.indicator:hover {
-  transform: scale(1.1);
-  opacity: 1;
-}
-
-.indicator.red {
-  background-color: red;
-}
-
-.indicator.orange {
-  background-color: orange;
-}
-
-.indicator.green {
-  background-color: limegreen;
+  display: none !important;
 }

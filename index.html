@@ -6,6 +6,7 @@
     <title>Aarhus Green City Index</title>
     <link rel="icon" type="image/jpg" href="assets/agci_logo.png">
     <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   </head>
   <body>
     <nav class="main-nav">
@@ -71,36 +72,41 @@
       }, 1000); // wait 1s, adjust if needed
     </script>
     <script>
-      function setProjectionColor(color) {
-        const colorOverlay = document.getElementById('colorOverlay');
-        const projection = document.querySelector('.projection');
-        const bgContainer = document.querySelector('.bg-container');
+      async function fetchAndSetFaceColor() {
+        try {
+          const res = await fetch('https://aarhus-agci.vercel.app/api/index');
+          const json = await res.json();
 
-        let selectedColor = 'transparent';
-        let shadowColor = 'white';
-        let afterGlowColor = 'rgba(255,255,255,0.2)';
+          const score = json.overall_score;
+          console.log("🌿 Latest Overall Score:", score);
 
-        switch (color) {
-          case 'red':
-            selectedColor = 'rgba(255, 0, 0, 1)';
-            shadowColor = 'red';
-            afterGlowColor = 'rgba(255, 0, 0, 0.2)';
-            break;
-          case 'orange':
-            selectedColor = 'rgba(255, 165, 0, 1)';
-            shadowColor = 'orange';
-            afterGlowColor = 'rgba(255, 165, 0, 0.2)';
-            break;
-          case 'green':
-            selectedColor = 'rgba(0, 255, 0, 1)';
-            shadowColor = 'limegreen';
-            afterGlowColor = 'rgba(0, 255, 0, 0.2)';
-            break;
+          let color = 'green';
+          if (score < 70) color = 'orange';
+          if (score < 50) color = 'red';
+
+          setProjectionColor(color);
+        } catch (err) {
+          console.error('Error fetching overall score:', err);
         }
+      }
 
-        colorOverlay.style.backgroundColor = selectedColor;
-        projection.style.filter = `grayscale(1) brightness(1.9) contrast(1.2) drop-shadow(0 0 0px ${shadowColor})`;
-        bgContainer.style.setProperty('--after-glow-color', afterGlowColor);
+      // Fetch once on page load
+      window.addEventListener("load", fetchAndSetFaceColor);
+
+      // Determine current time in UTC and schedule another fetch if before 2:05 UTC
+      const now = new Date();
+      const utcHours = now.getUTCHours();
+      const utcMinutes = now.getUTCMinutes();
+
+      if (utcHours < 2 || (utcHours === 2 && utcMinutes < 5)) {
+        const targetTime = new Date();
+        targetTime.setUTCHours(2, 5, 0, 0); // 02:05 UTC today
+        const delay = targetTime - now;
+
+        if (delay > 0) {
+          console.log(`⏳ Will re-fetch at 02:05 UTC in ${Math.round(delay / 1000)} seconds`);
+          setTimeout(fetchAndSetFaceColor, delay);
+        }
       }
     </script>
   </body>
