@@ -82,19 +82,33 @@
       async function fetchScore() {
         const { data, error } = await supabase
           .from('green_city_index')
-          .select('overall_score')
+          .select('overall_score, date')           // ✅ Also fetch the latest date
           .order('date', { ascending: false })
           .limit(1)
-          .single();
+          .maybeSingle();
 
-        if (error) return console.error("Supabase error:", error);
-        console.log("✅ Fetched score:", data.overall_score);
+        if (error) {
+          console.error("Supabase error:", error);
+          return;
+        }
+        if (!data) {
+          console.warn("No score found.");
+          return;
+        }
+
+        const score = data.overall_score;
+        const date = data.date;
+
+        console.log(`🌱 Score on ${date}: ${score}`);
 
         let color = 'green';
-        if (data.overall_score < 70) color = 'orange';
-        if (data.overall_score < 50) color = 'red';
-
+        if (score < 70) color = 'orange';
+        if (score < 50) color = 'red';
         setProjectionColor(color);
+
+        // Optionally show the date on the screen
+        const caption = document.querySelector('.loading-caption');
+        if (caption) caption.innerText = `AGCI score updated on ${date}`;
       }
 
       fetchScore();
