@@ -190,15 +190,15 @@
           labelGroup.style.display = "flex";
         }, 7000);
       }
-      // First fetch score and then run the popup
+      // Initial fetch and popup on page load
       await fetchScore();
       showPopupSequence();
 
-      // Loop every 10 seconds
-      setInterval(async () => {
-        await fetchScore();         // Always re-fetch score and update orangutan color
-        showPopupSequence();        // Then run popup sequence
-      }, 10000);
+      // Fetch new score every hour
+      setInterval(fetchScore, 3600000);
+
+      // Show the popup every 10 seconds
+      setInterval(showPopupSequence, 10000);
     </script>
   </body>
 </html>
