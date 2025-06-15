@@ -238,7 +238,7 @@ a {
 
 #score-popup {
   position: absolute;
-  top: 27%;
+  top: 30%;
   left: 28%;
   width: 45vw;
   height: 45vh;
@@ -261,7 +261,7 @@ a {
 }
 
 .score-label-line {
-  font-size: 5em;
+  font-size: 50px;
   font-family: monospace, sans-serif;
   font-weight: bold;
   text-transform: uppercase;
@@ -273,13 +273,12 @@ a {
 }
 
 #score-value {
-  font-size: 10em;
+  font-size: 100px;
   font-weight: bold;
   font-family: monospace, sans-serif;
   margin: 0;
   padding: 0;
   display: none;
-  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -293,12 +292,14 @@ a {
 
 #score-qr {
   display: none;
-  width: 15vw;
+  width: 80%;
+  max-width: 250px;
   height: auto;
-  margin-top: 2vh;
-  opacity: 0.85;
+  margin-top: -10%;
+  opacity: 0.75;
   filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.4));
-  transition: opacity 0.3s ease-in-out;
+  transition: opacity 0.1s ease-in-out;
+  animation: flicker 1.5s infinite alternate;
 }
 
 @keyframes flicker {
