@@ -1,19 +1,6 @@
 // app/api/index/route.tsx
-export const dynamic = 'force-dynamic';
-
 import { NextResponse } from 'next/server';
 import { getLatestIndex } from '@/lib/supabase';
-
-export async function OPTIONS() {
-  return new Response(null, {
-    status: 204,
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-    },
-  });
-}
 
 export async function GET(request: Request) {
   const url = new URL(request.url);
@@ -37,38 +24,19 @@ export async function GET(request: Request) {
           'Authorization': `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY}`,
         },
       }).then(res => res.json());
-
-      return new NextResponse(JSON.stringify(data), {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*', // Allow from all origins
-        },
-      });
-
+      
+      if (error) throw error;
+      return NextResponse.json(data);
     } else {
       // Get latest index only
       const latest = await getLatestIndex();
-      return new NextResponse(JSON.stringify(latest), {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*', // Allow from all origins
-        },
-      });
+      return NextResponse.json(latest);
     }
-
   } catch (error) {
     console.error('Error fetching index data:', error);
-    return new NextResponse(
-      JSON.stringify({ error: 'Failed to fetch index data' }),
-      {
-        status: 500,
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*', // Allow from all origins
-        },
-      }
+    return NextResponse.json(
+      { error: 'Failed to fetch index data' },
+      { status: 500 }
     );
   }
 }

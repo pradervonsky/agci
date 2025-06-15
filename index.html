@@ -71,43 +71,33 @@
         }
       }, 1000); // wait 1s, adjust if needed
     </script>
-    <script>
-      async function fetchAndSetFaceColor() {
-        try {
-          const res = await fetch('https://aarhus-agci.vercel.app/api/index');
-          const json = await res.json();
+    <script type="module">
+      import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
-          const score = json.overall_score;
-          console.log("🌿 Latest Overall Score:", score);
+      const supabase = createClient(
+        'https://dsvowabhmxtjvthxkyjd.supabase.co',
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRzdm93YWJobXh0anZ0aHhreWpkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDYwOTU5MzAsImV4cCI6MjA2MTY3MTkzMH0.rlICf548KyVUUJzdmV6SORd3br6sRw2lcjwQcharDv4' 
+      );
 
-          let color = 'green';
-          if (score < 70) color = 'orange';
-          if (score < 50) color = 'red';
+      async function fetchScore() {
+        const { data, error } = await supabase
+          .from('green_city_index')
+          .select('overall_score')
+          .order('date', { ascending: false })
+          .limit(1)
+          .single();
 
-          setProjectionColor(color);
-        } catch (err) {
-          console.error('Error fetching overall score:', err);
-        }
+        if (error) return console.error("Supabase error:", error);
+        console.log("✅ Fetched score:", data.overall_score);
+
+        let color = 'green';
+        if (data.overall_score < 70) color = 'orange';
+        if (data.overall_score < 50) color = 'red';
+
+        setProjectionColor(color);
       }
 
-      // Fetch once on page load
-      window.addEventListener("load", fetchAndSetFaceColor);
-
-      // Determine current time in UTC and schedule another fetch if before 2:05 UTC
-      const now = new Date();
-      const utcHours = now.getUTCHours();
-      const utcMinutes = now.getUTCMinutes();
-
-      if (utcHours < 2 || (utcHours === 2 && utcMinutes < 5)) {
-        const targetTime = new Date();
-        targetTime.setUTCHours(2, 5, 0, 0); // 02:05 UTC today
-        const delay = targetTime - now;
-
-        if (delay > 0) {
-          console.log(`⏳ Will re-fetch at 02:05 UTC in ${Math.round(delay / 1000)} seconds`);
-          setTimeout(fetchAndSetFaceColor, delay);
-        }
-      }
+      fetchScore();
     </script>
   </body>
 </html>
