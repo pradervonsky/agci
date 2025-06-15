@@ -25,6 +25,16 @@
       <div class="spinner"></div>
       <p class="loading-caption">AGCI_data-science-project_2025/Group 8/</p>
     </div>
+
+    <div id="score-popup">
+      <div id="score-label-group">
+        <p class="score-label-line">AGCI</p>
+        <p class="score-label-line">SCORE</p>
+      </div>
+      <p id="score-value"></p>
+      <img id="score-qr" src="assets/agci_qr.png" alt="Scan AGCI QR" />
+    </div>
+    
     <div class="bg-container">
       <div class="sky-wrapper">
         <video id="skyVideo" autoplay loop muted playsinline class="sky-bg">
@@ -44,11 +54,7 @@
         </p>
       </div>
     </div>
-    <div class="indicator-buttons">
-      <button class="indicator red" onclick="setProjectionColor('red')"></button>
-      <button class="indicator orange" onclick="setProjectionColor('orange')"></button>
-      <button class="indicator green" onclick="setProjectionColor('green')"></button>
-    </div>
+
     <script>
       window.addEventListener("load", function () {
         const loadingScreen = document.getElementById("loading-screen");
@@ -71,18 +77,55 @@
         }
       }, 1000); // wait 1s, adjust if needed
     </script>
+
+    <script>
+      function setProjectionColor(color) {
+        const colorOverlay = document.getElementById('colorOverlay');
+        const projection = document.querySelector('.projection');
+        const bgContainer = document.querySelector('.bg-container');
+
+        let selectedColor = 'transparent';
+        let shadowColor = 'white';
+        let afterGlowColor = 'rgba(255,255,255,0.2)';
+
+        switch (color) {
+          case 'red':
+            selectedColor = 'rgba(255, 0, 0, 1)';
+            shadowColor = 'red';
+            afterGlowColor = 'rgba(255, 0, 0, 0.2)';
+            break;
+          case 'orange':
+            selectedColor = 'rgba(255, 165, 0, 1)';
+            shadowColor = 'orange';
+            afterGlowColor = 'rgba(255, 165, 0, 0.2)';
+            break;
+          case 'green':
+            selectedColor = 'rgba(0, 255, 0, 1)';
+            shadowColor = 'limegreen';
+            afterGlowColor = 'rgba(0, 255, 0, 0.2)';
+            break;
+        }
+
+        colorOverlay.style.backgroundColor = selectedColor;
+        projection.style.filter = `grayscale(1) brightness(1.9) contrast(1.2) drop-shadow(0 0 0px ${shadowColor})`;
+        bgContainer.style.setProperty('--after-glow-color', afterGlowColor);
+      }
+    </script>
+
     <script type="module">
       import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
       const supabase = createClient(
         'https://dsvowabhmxtjvthxkyjd.supabase.co',
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRzdm93YWJobXh0anZ0aHhreWpkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDYwOTU5MzAsImV4cCI6MjA2MTY3MTkzMH0.rlICf548KyVUUJzdmV6SORd3br6sRw2lcjwQcharDv4' 
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRzdm93YWJobXh0anZ0aHhreWpkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDYwOTU5MzAsImV4cCI6MjA2MTY3MTkzMH0.rlICf548KyVUUJzdmV6SORd3br6sRw2lcjwQcharDv4'
       );
+
+      let score = null;
 
       async function fetchScore() {
         const { data, error } = await supabase
           .from('green_city_index')
-          .select('overall_score, date')           // ✅ Also fetch the latest date
+          .select('overall_score, date')
           .order('date', { ascending: false })
           .limit(1)
           .maybeSingle();
@@ -91,27 +134,62 @@
           console.error("Supabase error:", error);
           return;
         }
+
         if (!data) {
           console.warn("No score found.");
           return;
         }
 
-        const score = data.overall_score;
+        score = data.overall_score;
         const date = data.date;
 
-        console.log(`🌱 Score on ${date}: ${score}`);
+        console.log(`AGCI Score on ${date}: ${score}`);
 
         let color = 'green';
         if (score < 70) color = 'orange';
         if (score < 50) color = 'red';
+
         setProjectionColor(color);
 
-        // Optionally show the date on the screen
         const caption = document.querySelector('.loading-caption');
         if (caption) caption.innerText = `AGCI score updated on ${date}`;
       }
 
-      fetchScore();
+      function showPopupSequence() {
+        const popup = document.getElementById("score-popup");
+        const labelGroup = document.getElementById("score-label-group");
+        const value = document.getElementById("score-value");
+        const qr = document.getElementById("score-qr");
+
+        if (!popup || !labelGroup || !value || !qr || score === null) return;
+
+        // Reset all states
+        popup.style.display = "flex";
+        labelGroup.style.display = "flex";
+        value.style.display = "none";
+        qr.style.display = "none";
+
+        // Step 1: Show label (0–1.5s)
+        setTimeout(() => {
+          labelGroup.style.display = "none";
+          value.innerText = score.toFixed(1);
+          value.style.display = "flex";
+        }, 1500);
+
+        // Step 2: Show QR (after 4s)
+        setTimeout(() => {
+          value.style.display = "none";
+          qr.style.display = "block";
+        }, 4000);
+
+        // Step 3: Hide everything after 7s
+        setTimeout(() => {
+          popup.style.display = "none";
+          value.style.display = "none";
+          qr.style.display = "none";
+          labelGroup.style.display = "flex";
+        }, 7000);
+      }
     </script>
   </body>
 </html>
