@@ -2,6 +2,17 @@
 import { NextResponse } from 'next/server';
 import { getLatestIndex } from '@/lib/supabase';
 
+export async function OPTIONS() {
+  return new Response(null, {
+    status: 204,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+    },
+  });
+}
+
 export async function GET(request: Request) {
   const url = new URL(request.url);
   const days = url.searchParams.get('days');
@@ -29,7 +40,7 @@ export async function GET(request: Request) {
         status: 200,
         headers: {
           'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Origin': '*', // Allow from all origins
         },
       });
 
@@ -40,7 +51,7 @@ export async function GET(request: Request) {
         status: 200,
         headers: {
           'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*', // ✅ Allow from all origins
+          'Access-Control-Allow-Origin': '*', // Allow from all origins
         },
       });
     }
@@ -53,7 +64,7 @@ export async function GET(request: Request) {
         status: 500,
         headers: {
           'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*', // ✅ Also needed for error cases
+          'Access-Control-Allow-Origin': '*', // Allow from all origins
         },
       }
     );
