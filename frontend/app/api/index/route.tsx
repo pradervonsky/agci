@@ -24,19 +24,38 @@ export async function GET(request: Request) {
           'Authorization': `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY}`,
         },
       }).then(res => res.json());
-      
-      if (error) throw error;
-      return NextResponse.json(data);
+
+      return new NextResponse(JSON.stringify(data), {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+        },
+      });
+
     } else {
       // Get latest index only
       const latest = await getLatestIndex();
-      return NextResponse.json(latest);
+      return new NextResponse(JSON.stringify(latest), {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*', // ✅ Allow from all origins
+        },
+      });
     }
+
   } catch (error) {
     console.error('Error fetching index data:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch index data' },
-      { status: 500 }
+    return new NextResponse(
+      JSON.stringify({ error: 'Failed to fetch index data' }),
+      {
+        status: 500,
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*', // ✅ Also needed for error cases
+        },
+      }
     );
   }
 }
