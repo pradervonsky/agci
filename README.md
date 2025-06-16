@@ -1,5 +1,8 @@
 ## Changelog
 
+### [v1.1] – 2025-06-16
+- The color-changing of the orangutan’s face is now automated by fetching from the overall_score in the database
+
 ### [v1.0] – 2025-05-06
 - Created backend login with api connectors and data simulations
 - Implemented metrics and index calculations based on WHO and EU targets (aligned with Green City Accord Indicators Guidebook (2024))
